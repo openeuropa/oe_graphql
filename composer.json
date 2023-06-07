@@ -18,7 +18,8 @@
         "drush/drush": "^11.1",
         "openeuropa/code-review": "^2.0",
         "openeuropa/task-runner-drupal-project-symlink": "^1.0.0-beta6",
-        "symfony/phpunit-bridge": "^6.0"
+        "symfony/phpunit-bridge": "^6.0",
+        "symfony/validator": "6.2.11"
     },
     "autoload": {
         "psr-4": {
@@ -57,7 +58,8 @@
             }
         },
         "_readme": [
-            "Explicit requirement of symfony/phpunit-bridge to replace drupal/core-dev testing classes and traits."
+            "Explicit requirement of symfony/phpunit-bridge to replace drupal/core-dev testing classes and traits.",
+            "Locking temporarily symfony/validator, until this is released: https://github.com/symfony/symfony/issues/50526"
         ]
     },
     "config": {
