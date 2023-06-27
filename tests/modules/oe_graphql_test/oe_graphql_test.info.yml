@@ -1,0 +1,6 @@
+name: OpenEuropa GraphQL Test Module
+
+type: module
+core_version_requirement: ^9.4 || ^10
+dependencies:
+  - oe_graphql:oe_graphql
