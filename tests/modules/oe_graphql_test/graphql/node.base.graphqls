@@ -1,8 +1,4 @@
 type Page {
-  id : ID!
-  path: String
-  title: String
-  created: String
-  changed: String
-  lang: String
+  uuid : ID!
+  label: String!
 }

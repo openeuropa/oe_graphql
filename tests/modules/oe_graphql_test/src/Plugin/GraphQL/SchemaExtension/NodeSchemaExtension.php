@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\oe_graphql_test\Plugin\GraphQL\SchemaExtension;
 
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\graphql\GraphQL\Execution\ResolveContext;
+use Drupal\oe_graphql\Plugin\GraphQL\SchemaExtension\SchemaExtensionBase;
 use Drupal\graphql\GraphQL\ResolverRegistryInterface;
 use Drupal\node\NodeInterface;
 use Drupal\path_alias\AliasManager;
@@ -48,7 +48,19 @@ class NodeSchemaExtension extends SchemaExtensionBase {
     parent::registerResolvers($registry);
 
     $this->addTypeResolvers();
-    $this->resolveFields();
+
+    // Resolve query.
+    $this->registry->addFieldResolver('Query', 'content',
+      $this->builder->compose(
+        $this->builder->produce('route_load')
+          ->map('path', $this->builder->fromArgument('path')),
+        $this->builder->produce('route_entity')
+          ->map('url', $this->builder->fromParent())
+      )
+    );
+
+    // Resolve base fields.
+    $this->resolveBaseFields('Page', 'page');
   }
 
   /**
@@ -60,57 +72,6 @@ class NodeSchemaExtension extends SchemaExtensionBase {
         self::resolveContentTypes(...)
       );
     }
-  }
-
-  /**
-   * Add all field resolvers.
-   */
-  protected function resolveFields(): void {
-    $this->registry->addFieldResolver('Query', 'content',
-      $this->builder->compose(
-        $this->builder->produce('route_load')
-          ->map('path', $this->builder->fromArgument('path')),
-        $this->builder->produce('route_entity')
-          ->map('url', $this->builder->fromParent())
-      )
-    );
-    $this->resolveContentInterfaceFields('Page');
-  }
-
-  /**
-   * Resolve fields of the event interface.
-   */
-  protected function resolveContentInterfaceFields(string $type) {
-    $this->addFieldResolverIfNotExists($type, 'id',
-      $this->builder->produce('entity_uuid')
-        ->map('entity', $this->builder->fromParent())
-    );
-    $this->addFieldResolverIfNotExists($type, 'path',
-      $this->builder->callback(function (NodeInterface $node) {
-        return $this->aliasManager->getAliasByPath('/node/' . $node->id(), $node->language()->getId());
-      })
-    );
-    $this->addFieldResolverIfNotExists($type, 'title',
-      $this->builder->produce('entity_label')
-        ->map('entity', $this->builder->fromParent())
-    );
-    $this->addFieldResolverIfNotExists($type, 'created',
-      $this->builder->produce('entity_created')
-        ->map('entity', $this->builder->fromParent())
-    );
-    $this->addFieldResolverIfNotExists($type, 'changed',
-      $this->builder->produce('entity_changed')
-        ->map('entity', $this->builder->fromParent())
-    );
-    $this->addFieldResolverIfNotExists($type, 'lang',
-      $this->builder->compose(
-        $this->builder->produce('entity_language')
-          ->map('entity', $this->builder->fromParent()),
-        $this->builder->callback(function (LanguageInterface $language) {
-          return $language->getId();
-        })
-      )
-    );
   }
 
   /**

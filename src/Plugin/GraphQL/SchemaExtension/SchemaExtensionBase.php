@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\oe_graphql_test\Plugin\GraphQL\SchemaExtension;
+namespace Drupal\oe_graphql\Plugin\GraphQL\SchemaExtension;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\graphql\GraphQL\ResolverRegistryInterface;
@@ -12,7 +12,7 @@ use Drupal\oe_graphql\GraphQL\Traits\ResolverHelperTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * The base class for schema extensions inspired by the thunder distribution.
+ * The base class for schema extensions.
  */
 abstract class SchemaExtensionBase extends SdlSchemaExtensionPluginBase {
 
@@ -61,14 +61,14 @@ abstract class SchemaExtensionBase extends SdlSchemaExtensionPluginBase {
   protected function resolveBaseFields(string $type, string $entityTypeId) {
     $this->addFieldResolverIfNotExists(
       $type,
-      'id',
+      'uuid',
       $this->builder->produce('entity_uuid')
         ->map('entity', $this->builder->fromParent())
     );
 
     $this->addFieldResolverIfNotExists(
       $type,
-      'name',
+      'label',
       $this->builder->produce('entity_label')
         ->map('entity', $this->builder->fromParent())
     );
