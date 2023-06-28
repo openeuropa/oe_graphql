@@ -11,8 +11,4 @@ batching: true
 disable_introspection: false
 query_depth: null
 query_complexity: null
-schema_configuration:
-  alterable_composable:
-    extensions:
-      node: 0
 persisted_queries_settings: {  }
