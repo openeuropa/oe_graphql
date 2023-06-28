@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\oe_graphql_test\Plugin\GraphQL\SchemaExtension;
 
 use Drupal\graphql\GraphQL\Execution\ResolveContext;
-use Drupal\oe_graphql\Plugin\GraphQL\SchemaExtension\SchemaExtensionBase;
 use Drupal\graphql\GraphQL\ResolverRegistryInterface;
 use Drupal\node\NodeInterface;
+use Drupal\oe_graphql\Plugin\GraphQL\SchemaExtension\SchemaExtensionBase;
 use Drupal\path_alias\AliasManager;
 use GraphQL\Type\Definition\ResolveInfo;
 use Symfony\Component\DependencyInjection\ContainerInterface;
