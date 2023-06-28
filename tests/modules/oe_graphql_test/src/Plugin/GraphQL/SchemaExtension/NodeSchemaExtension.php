@@ -60,7 +60,7 @@ class NodeSchemaExtension extends SchemaExtensionBase {
     );
 
     // Resolve base fields.
-    $this->resolveBaseFields('Page', 'page');
+    $this->resolveBaseFields('Page', 'test_page');
   }
 
   /**
@@ -92,7 +92,7 @@ class NodeSchemaExtension extends SchemaExtensionBase {
   protected static function resolveContentTypes($value, ResolveContext $context, ResolveInfo $info): string {
     if ($value instanceof NodeInterface) {
       return match($value->bundle()) {
-        'page' => 'Page',
+        'test_page' => 'Page',
       };
     }
     throw new \Exception('Invalid page type.');

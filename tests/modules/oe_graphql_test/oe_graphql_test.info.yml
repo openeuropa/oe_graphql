@@ -4,3 +4,12 @@ type: module
 core_version_requirement: ^9.4 || ^10
 dependencies:
   - oe_graphql:oe_graphql
+
+config_devel:
+  install:
+    - core.entity_form_display.node.test_page.default
+    - core.entity_view_display.node.test_page.default
+    - field.field.node.test_page.body
+    - node.type.test_page
+  optional:
+    - language.content_settings.node.test_page
