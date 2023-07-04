@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: oe_default
+label: Default
+endpoint: /api/graphql
+debug_flag: 0
+schema: oe_default
+caching: false
+batching: true
+disable_introspection: false
+query_depth: null
+query_complexity: null
+persisted_queries_settings: {  }

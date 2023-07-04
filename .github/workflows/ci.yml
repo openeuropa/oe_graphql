@@ -1,0 +1,31 @@
+name: ci
+on: [pull_request]
+jobs:
+  automated-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["8.1"]
+        composer_command: ["composer install"]
+    env:
+      PHP_VERSION: ${{ matrix.php_version }}
+    steps:
+      - name: clone
+        uses: actions/checkout@v2
+      - run: docker-compose up -d
+      - name: build
+        run: docker-compose exec -T web ${{ matrix.composer_command }}
+      - name: test
+        run: docker-compose exec -T web ./vendor/bin/phpunit
+  code-sniffer:
+    runs-on: ubuntu-latest
+    env:
+      PHP_VERSION: "8.1"
+    steps:
+      - name: clone
+        uses: actions/checkout@v2
+      - run: docker-compose up -d
+      - name: build
+        run: docker-compose exec -T web composer install
+      - name: test
+        run: docker-compose exec -T web ./vendor/bin/grumphp run
