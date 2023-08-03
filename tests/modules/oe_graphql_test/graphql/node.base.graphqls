@@ -1,0 +1,4 @@
+type Page {
+  uuid : ID!
+  label: String!
+}
