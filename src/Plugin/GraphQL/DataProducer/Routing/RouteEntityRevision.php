@@ -10,11 +10,11 @@ use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Drupal\graphql\GraphQL\Buffers\EntityBuffer;
+use Drupal\graphql\GraphQL\Buffers\EntityRevisionBuffer;
 use Drupal\graphql\GraphQL\Execution\FieldContext;
 use Drupal\graphql\Plugin\GraphQL\DataProducer\DataProducerPluginBase;
 use GraphQL\Deferred;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\graphql\GraphQL\Buffers\EntityRevisionBuffer;
 
 /**
  * Loads the entity of given revision associated with the current URL.
