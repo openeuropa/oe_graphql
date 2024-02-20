@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * The schema extension for the youth hub content types.
+ * Test schema extension.
  *
  * @SchemaExtension(
  *   id = "node",
@@ -69,7 +69,7 @@ class NodeSchemaExtension extends SchemaExtensionBase {
   protected function addTypeResolvers(): void {
     foreach (['Page'] as $interface) {
       $this->registry->addTypeResolver($interface,
-        self::resolveContentTypes(...)
+        \Closure::fromCallable([self::class, 'resolveContentTypes'])
       );
     }
   }
