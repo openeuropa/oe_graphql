@@ -16,7 +16,7 @@ jobs:
       - name: build
         run: docker-compose exec -T web ${{ matrix.composer_command }}
       - name: wait-for-db
-        run: while ! docker-compose exec -T mysql mysql -uroot -N -B -e "SHOW DATABASES;" | grep -q oe_graphql; do echo "Waiting for database..."; sleep 1; done
+        run: sleep 10
       - name: test
         run: docker-compose exec -T web ./vendor/bin/phpunit
   code-sniffer:
