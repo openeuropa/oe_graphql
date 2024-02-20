@@ -1,5 +1,6 @@
-# oe_graphql
-GraphQL integration module for OpenEuropa components.
+# OpenEuropa GraphQL
+
+GraphQL integration module for OpenEuropa components, based on the [GraphQL](https://www.drupal.org/project/graphql) module.
 
 ## Development setup
 
