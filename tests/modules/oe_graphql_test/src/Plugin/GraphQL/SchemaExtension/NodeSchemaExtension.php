@@ -46,19 +46,7 @@ class NodeSchemaExtension extends SchemaExtensionBase {
    */
   public function registerResolvers(ResolverRegistryInterface $registry): void {
     parent::registerResolvers($registry);
-
     $this->addTypeResolvers();
-
-    // Resolve query.
-    $this->registry->addFieldResolver('Query', 'content',
-      $this->builder->compose(
-        $this->builder->produce('route_load')
-          ->map('path', $this->builder->fromArgument('path')),
-        $this->builder->produce('route_entity')
-          ->map('url', $this->builder->fromParent())
-      )
-    );
-
     // Resolve base fields.
     $this->resolveBaseFields('Page', 'test_page');
   }

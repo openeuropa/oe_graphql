@@ -48,6 +48,16 @@ abstract class SchemaExtensionBase extends SdlSchemaExtensionPluginBase {
    */
   public function registerResolvers(ResolverRegistryInterface $registry) {
     $this->registry = $registry;
+    // Resolve query.
+    $this->registry->addFieldResolver('Query', 'content',
+      $this->builder->compose(
+        $this->builder->produce('route_load')
+          ->map('path', $this->builder->fromArgument('path')),
+        $this->builder->produce('route_entity')
+          ->map('url', $this->builder->fromParent())
+          ->map('revision_id', $this->builder->fromArgument('revision'))
+      )
+    );
   }
 
   /**
