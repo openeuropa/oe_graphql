@@ -53,9 +53,10 @@ abstract class SchemaExtensionBase extends SdlSchemaExtensionPluginBase {
       $this->builder->compose(
         $this->builder->produce('route_load')
           ->map('path', $this->builder->fromArgument('path')),
-        $this->builder->produce('route_entity')
+        $this->builder->produce('oe_graphql_route_entity_revision')
           ->map('url', $this->builder->fromParent())
           ->map('revision_id', $this->builder->fromArgument('revision'))
+          ->map('language', $this->builder->fromArgument('language'))
       )
     );
   }
