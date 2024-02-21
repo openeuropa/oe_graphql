@@ -150,6 +150,12 @@ class RouteEntityRevisionTest extends GraphQLTestBase {
     ]);
     $this->assertEquals('Test Event', $result->label());
 
+    $result = $this->executeDataProducer('oe_graphql_route_entity_revision', [
+      'url' => $url,
+      'revision_id' => $this->published_node->getRevisionId(),
+    ]);
+    $this->assertEquals('Test Event rev 2', $result->label());
+
     // Unpublished node to unpublished translations. Make sure we are not
     // allowed to get the unpublished nodes or translations.
     $url = Url::fromRoute('entity.node.canonical', ['node' => $this->unpublished_node->id()]);
