@@ -48,14 +48,14 @@ class NodeSchemaExtension extends SchemaExtensionBase {
     parent::registerResolvers($registry);
     $this->addTypeResolvers();
     // Resolve base fields.
-    $this->resolveBaseFields('Page', 'test_page');
+    $this->resolveContentInterfaceFields('Page');
   }
 
   /**
    * Add resolvers for the interface types.
    */
   protected function addTypeResolvers(): void {
-    foreach (['Page'] as $interface) {
+    foreach (['Page', 'Content', 'ContentInterface'] as $interface) {
       $this->registry->addTypeResolver($interface,
         \Closure::fromCallable([self::class, 'resolveContentTypes'])
       );

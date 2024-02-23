@@ -2,4 +2,19 @@ schema {
   query: Query
 }
 
-type Query
+union Content = Page
+
+interface ContentInterface {
+  id: Int!
+  revision: Int!
+  uuid : ID!
+  label: String!
+  lang: String!
+  path: String!
+  created: String!
+  changed: String!
+}
+
+type Query {
+  content(path: String!, revision: Int, lang: String): Content
+}

@@ -1,4 +1,11 @@
-type Page {
+type Page implements ContentInterface {
+  id: Int!
   uuid : ID!
   label: String!
+  revision: Int!
+  lang: String!
+  path: String!
+  created: String!
+  changed: String!
+  body: String
 }

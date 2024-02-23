@@ -53,8 +53,10 @@ class QueryTest extends BrowserTestBase {
     $this->server = Server::load('oe_default');
     $response = $this->query(<<<QUERY
 query {
-  content(path: "node/1") {
-    label
+  content(path: "/node/1") {
+      ... on ContentInterface {
+        label
+      }
   }
 }
 QUERY
