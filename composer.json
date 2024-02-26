@@ -8,7 +8,6 @@
     "require": {
         "php": ">=8.0",
         "drupal/core": "^10",
-        "drupal/graphql": "dev-4.x",
         "drupal/graphql_core_schema": "dev-1.0.x"
     },
     "require-dev": {
