@@ -57,7 +57,7 @@ class QueryTest extends BrowserTestBase {
     $this->server = Server::load('oe_default');
     $response = $this->query(<<<QUERY
 query {
-  content(path: "/node/1", langcode: "en") {
+  content(path: "/node/1") {
       label
   }
 }
@@ -73,6 +73,34 @@ query {
 QUERY
     );
     $this->assertEquals('{"data":{"content":{"label":"Test page FR"}}}', $response->getContent());
+
+    // Create a new revision.
+    $node->setTitle('Test page rev 2');
+    $node->setNewRevision(TRUE);
+    $node->save();
+
+    // Assert that, with no revision parameter, we get the latest revision.
+    $response = $this->query(<<<QUERY
+query {
+  content(path: "/node/1") {
+      label
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"content":{"label":"Test page rev 2"}}}', $response->getContent());
+
+    // Assert that we get the specified revision.
+    $response = $this->query(<<<QUERY
+query {
+  content(path: "/node/1", revision: 1) {
+      label
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"content":{"label":"Test page"}}}', $response->getContent());
+
   }
 
 }
