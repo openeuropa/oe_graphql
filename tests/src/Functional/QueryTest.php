@@ -47,6 +47,9 @@ class QueryTest extends BrowserTestBase {
     $node = Node::create($values);
     $node->save();
 
+    $node->addTranslation('fr', ['title' => 'Test page FR']);
+    $node->save();
+
     $this->grantPermissions(Role::load(Role::ANONYMOUS_ID), [
       'access content',
       'execute oe_default arbitrary graphql requests',
@@ -54,13 +57,22 @@ class QueryTest extends BrowserTestBase {
     $this->server = Server::load('oe_default');
     $response = $this->query(<<<QUERY
 query {
-  content(path: "/node/1") {
+  content(path: "/node/1", langcode: "en") {
       label
   }
 }
 QUERY
     );
     $this->assertEquals('{"data":{"content":{"label":"Test page"}}}', $response->getContent());
+    $response = $this->query(<<<QUERY
+query {
+  content(path: "/node/1", langcode: "fr") {
+      label
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"content":{"label":"Test page FR"}}}', $response->getContent());
   }
 
 }

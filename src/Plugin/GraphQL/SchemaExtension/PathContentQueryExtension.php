@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\oe_graphql\Plugin\GraphQL\SchemaExtension;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\graphql\GraphQL\ResolverBuilder;
 use Drupal\graphql\GraphQL\ResolverRegistryInterface;
-use Drupal\graphql\Plugin\DataProducerPluginManager;
 use Drupal\graphql\Plugin\GraphQL\SchemaExtension\SdlSchemaExtensionPluginBase;
-use Drupal\oe_graphql\GraphQL\Traits\ResolverHelperTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\graphql_core_schema\CoreSchemaExtensionInterface;
 
 /**
  * Path content query extension.
@@ -21,49 +19,35 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   schema = "core_composable"
  * )
  */
-class PathContentQueryExtension extends SdlSchemaExtensionPluginBase {
-
-  use ResolverHelperTrait;
-
-  /**
-   * The data producer plugin manager.
-   *
-   * @var \Drupal\graphql\Plugin\DataProducerPluginManager
-   */
-  protected DataProducerPluginManager $dataProducerManager;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
+class PathContentQueryExtension extends SdlSchemaExtensionPluginBase implements CoreSchemaExtensionInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $plugin->createResolverBuilder();
-    $plugin->dataProducerManager = $container->get('plugin.manager.graphql.data_producer');
-    $plugin->entityTypeManager = $container->get('entity_type.manager');
-    return $plugin;
+  public function getEntityTypeDependencies() {
+    return ['node'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getExtensionDependencies() {
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function registerResolvers(ResolverRegistryInterface $registry) {
-    $this->registry = $registry;
-    // Resolve query.
-    $this->registry->addFieldResolver('Query', 'content',
-      $this->builder->compose(
-        $this->builder->produce('route_load')
-          ->map('path', $this->builder->fromArgument('path')),
-        $this->builder->produce('oe_graphql_route_entity_revision')
-          ->map('url', $this->builder->fromParent())
-          ->map('revision_id', $this->builder->fromArgument('revision'))
-          ->map('language', $this->builder->fromArgument('lang'))
+    $builder = new ResolverBuilder();
+    $registry->addFieldResolver('Query', 'content',
+      $builder->compose(
+        $builder->produce('route_load')
+          ->map('path', $builder->fromArgument('path')),
+        $builder->produce('oe_graphql_route_entity_revision')
+          ->map('url', $builder->fromParent())
+          ->map('revision_id', $builder->fromArgument('revision'))
+          ->map('language', $builder->fromArgument('langcode'))
       )
     );
   }

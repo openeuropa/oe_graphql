@@ -1,10 +1,12 @@
 name: OpenEuropa GraphQL Test Module
 
 type: module
-core_version_requirement: ^9.4 || ^10
+core_version_requirement: ^10
 dependencies:
   - oe_graphql:oe_graphql
   - drupal:node
+  - drupal:content_translation
+  - drupal:language
 
 config_devel:
   install:
