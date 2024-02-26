@@ -2,13 +2,47 @@ langcode: en
 status: true
 dependencies: {  }
 name: oe_default
-label: Default
+label: 'OpenEuropa Default'
 endpoint: /api/graphql
 debug_flag: 0
-schema: oe_default
-caching: false
+schema: core_composable
+caching: true
 batching: true
 disable_introspection: false
 query_depth: null
 query_complexity: null
+schema_configuration:
+  core_composable:
+    extensions:
+      entity_query: entity_query
+      oe_graphql_path_content_query: oe_graphql_path_content_query
+    generate_value_fields: 1
+    entity_base_fields:
+      fields:
+        entityBundle: entityBundle
+        entityTypeId: entityTypeId
+        isNew: isNew
+        label: label
+        langcode: langcode
+        uuid: uuid
+    enabled_entity_types:
+      node: 1
+    fields:
+      node:
+        changed: changed
+        created: created
+        default_langcode: default_langcode
+        nid: nid
+        promote: promote
+        revision_default: revision_default
+        revision_log: revision_log
+        revision_timestamp: revision_timestamp
+        revision_translation_affected: revision_translation_affected
+        revision_uid: revision_uid
+        status: status
+        sticky: sticky
+        title: title
+        type: type
+        uid: uid
+        vid: vid
 persisted_queries_settings: {  }

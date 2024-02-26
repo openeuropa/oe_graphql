@@ -27,6 +27,7 @@ class QueryTest extends BrowserTestBase {
     'system',
     'graphql',
     'oe_graphql',
+    'graphql_core_schema',
     'oe_graphql_test',
   ];
 
@@ -54,9 +55,7 @@ class QueryTest extends BrowserTestBase {
     $response = $this->query(<<<QUERY
 query {
   content(path: "/node/1") {
-      ... on ContentInterface {
-        label
-      }
+      label
   }
 }
 QUERY
