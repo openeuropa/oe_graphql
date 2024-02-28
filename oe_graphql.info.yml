@@ -7,7 +7,3 @@ core_version_requirement: ^10
 dependencies:
   - graphql:graphql
   - graphql_core_schema:graphql_core_schema
-
-config_devel:
-  install:
-    - graphql.graphql_servers.oe_default
