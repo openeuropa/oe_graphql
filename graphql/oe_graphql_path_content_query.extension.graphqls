@@ -1,3 +1,4 @@
 extend type Query {
   content(path: String!, revision: Int, langcode: String): Node
+  contentPaths(type: String!): [ContentPath]
 }

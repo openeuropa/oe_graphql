@@ -40,6 +40,17 @@ class PathContentQueryExtension extends SdlSchemaExtensionPluginBase implements 
    */
   public function registerResolvers(ResolverRegistryInterface $registry) {
     $builder = new ResolverBuilder();
+    foreach (['path', 'translations'] as $field) {
+      $registry->addFieldResolver('ContentPath', $field, $builder->callback(function ($data) use ($field) {
+        return $data[$field];
+      }));
+    }
+
+    $registry->addFieldResolver('Query', 'contentPaths',
+      $builder->produce('oe_graphql_content_paths')
+        ->map('type', $builder->fromArgument('type')),
+    );
+
     $registry->addFieldResolver('Query', 'content',
       $builder->compose(
         $builder->produce('route_load')
