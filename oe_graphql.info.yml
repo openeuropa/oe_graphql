@@ -3,10 +3,7 @@ description: GraphQL integration for OpenEuropa components.
 package: OpenEuropa
 
 type: module
-core_version_requirement: ^9.4 || ^10
+core_version_requirement: ^10
 dependencies:
   - graphql:graphql
-
-config_devel:
-  install:
-    - graphql.graphql_servers.oe_default
+  - graphql_core_schema:graphql_core_schema

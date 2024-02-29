@@ -1,3 +1,0 @@
-extend type Query {
-  content(path: String!): Page
-}

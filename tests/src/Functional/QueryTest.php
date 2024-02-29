@@ -27,6 +27,7 @@ class QueryTest extends BrowserTestBase {
     'system',
     'graphql',
     'oe_graphql',
+    'graphql_core_schema',
     'oe_graphql_test',
   ];
 
@@ -46,6 +47,9 @@ class QueryTest extends BrowserTestBase {
     $node = Node::create($values);
     $node->save();
 
+    $node->addTranslation('fr', ['title' => 'Test page FR']);
+    $node->save();
+
     $this->grantPermissions(Role::load(Role::ANONYMOUS_ID), [
       'access content',
       'execute oe_default arbitrary graphql requests',
@@ -53,13 +57,50 @@ class QueryTest extends BrowserTestBase {
     $this->server = Server::load('oe_default');
     $response = $this->query(<<<QUERY
 query {
-  content(path: "node/1") {
-    label
+  content(path: "/node/1") {
+      label
   }
 }
 QUERY
     );
     $this->assertEquals('{"data":{"content":{"label":"Test page"}}}', $response->getContent());
+    $response = $this->query(<<<QUERY
+query {
+  content(path: "/node/1", langcode: "fr") {
+      label
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"content":{"label":"Test page FR"}}}', $response->getContent());
+
+    // Create a new revision.
+    $node->setTitle('Test page rev 2');
+    $node->setNewRevision(TRUE);
+    $node->save();
+
+    // Assert that, with no revision parameter, we get the latest revision.
+    $response = $this->query(<<<QUERY
+query {
+  content(path: "/node/1") {
+      label
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"content":{"label":"Test page rev 2"}}}', $response->getContent());
+
+    // Assert that we get the specified revision.
+    $response = $this->query(<<<QUERY
+query {
+  content(path: "/node/1", revision: 1) {
+      label
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"content":{"label":"Test page"}}}', $response->getContent());
+
   }
 
 }
