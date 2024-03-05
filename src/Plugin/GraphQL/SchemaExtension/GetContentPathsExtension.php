@@ -10,16 +10,16 @@ use Drupal\graphql\Plugin\GraphQL\SchemaExtension\SdlSchemaExtensionPluginBase;
 use Drupal\graphql_core_schema\CoreSchemaExtensionInterface;
 
 /**
- * Path content query extension.
+ * Get content paths and their translations.
  *
  * @SchemaExtension(
- *   id = "oe_graphql_path_content_query",
- *   name = "OpenEuropa: Path Content Query",
- *   description = "Query content by URL path, revision and language.",
+ *   id = "oe_graphql_get_content_paths",
+ *   name = "OpenEuropa: Get content paths",
+ *   description = "Get content paths and their translations.",
  *   schema = "core_composable"
  * )
  */
-class PathContentQueryExtension extends SdlSchemaExtensionPluginBase implements CoreSchemaExtensionInterface {
+class GetContentPathsExtension extends SdlSchemaExtensionPluginBase implements CoreSchemaExtensionInterface {
 
   /**
    * {@inheritdoc}
@@ -40,15 +40,15 @@ class PathContentQueryExtension extends SdlSchemaExtensionPluginBase implements 
    */
   public function registerResolvers(ResolverRegistryInterface $registry) {
     $builder = new ResolverBuilder();
-    $registry->addFieldResolver('Query', 'content',
-      $builder->compose(
-        $builder->produce('route_load')
-          ->map('path', $builder->fromArgument('path')),
-        $builder->produce('oe_graphql_route_entity_revision')
-          ->map('url', $builder->fromParent())
-          ->map('revision_id', $builder->fromArgument('revision'))
-          ->map('language', $builder->fromArgument('langcode'))
-      )
+    foreach (['path', 'langcode'] as $field) {
+      $registry->addFieldResolver('ContentPath', $field, $builder->callback(function ($data) use ($field) {
+        return $data[$field];
+      }));
+    }
+
+    $registry->addFieldResolver('Query', 'contentPaths',
+      $builder->produce('oe_graphql_content_paths')
+        ->map('type', $builder->fromArgument('type')),
     );
   }
 

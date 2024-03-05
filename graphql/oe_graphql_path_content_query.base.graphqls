@@ -1,4 +1,0 @@
-type ContentPath {
-  path: String!
-  langcode: String!
-}
