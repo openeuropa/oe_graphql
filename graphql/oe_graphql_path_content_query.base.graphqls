@@ -1,4 +1,4 @@
 type ContentPath {
   path: String!
-  translations: [String!]
+  langcode: String!
 }

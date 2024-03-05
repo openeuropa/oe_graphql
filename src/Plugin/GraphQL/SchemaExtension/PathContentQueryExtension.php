@@ -40,7 +40,7 @@ class PathContentQueryExtension extends SdlSchemaExtensionPluginBase implements 
    */
   public function registerResolvers(ResolverRegistryInterface $registry) {
     $builder = new ResolverBuilder();
-    foreach (['path', 'translations'] as $field) {
+    foreach (['path', 'langcode'] as $field) {
       $registry->addFieldResolver('ContentPath', $field, $builder->callback(function ($data) use ($field) {
         return $data[$field];
       }));

@@ -90,21 +90,26 @@ class ContentPaths extends DataProducerPluginBase implements ContainerFactoryPlu
     return new Deferred(function () use ($query, $cacheContext, $storage) {
       return array_map(function ($id) use ($cacheContext, $storage) {
         $node = $storage->load($id);
+        $paths = [];
         $languages = $node->getTranslationLanguages();
-        $context = new RenderContext();
-        $path = $this->renderer->executeInRenderContext($context, function () use ($node) {
-          return $node->toUrl()->toString();
-        });
-        $cacheContext->addCacheableDependency($node);
-        // Make sure we get the entity processed path without Drupal base path.
-        $base_path = base_path();
-        if (strpos($path, $base_path) === 0) {
-          $path = substr($path, strlen($base_path) - 1);
+        foreach ($languages as $langcode => $language) {
+          $context = new RenderContext();
+          $path = $this->renderer->executeInRenderContext($context, function () use ($node, $language) {
+            return $node->toUrl('canonical', ['language' => $language])
+              ->toString();
+          });
+          $cacheContext->addCacheableDependency($node);
+          // Get the entity processed path without Drupal base path.
+          $base_path = base_path();
+          if (strpos($path, $base_path) === 0) {
+            $path = substr($path, strlen($base_path) - 1);
+          }
+          $paths[] = [
+            'path' => $path,
+            'langcode' => $langcode,
+          ];
         }
-        return [
-          'path' => $path,
-          'translations' => array_keys((array) $languages),
-        ];
+        return $paths;
       }, $query->execute());
     });
   }
