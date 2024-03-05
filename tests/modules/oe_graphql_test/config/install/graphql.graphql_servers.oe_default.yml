@@ -16,6 +16,7 @@ schema_configuration:
     extensions:
       entity_query: entity_query
       oe_graphql_path_content_query: oe_graphql_path_content_query
+      oe_graphql_get_content_paths: oe_graphql_get_content_paths
     generate_value_fields: 1
     entity_base_fields:
       fields:
