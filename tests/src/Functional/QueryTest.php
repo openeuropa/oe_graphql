@@ -101,6 +101,17 @@ QUERY
     );
     $this->assertEquals('{"data":{"content":{"label":"Test page"}}}', $response->getContent());
 
+    // Assert list of content paths.
+    $response = $this->query(<<<QUERY
+query {
+  contentPaths(type: "test_page") {
+    path
+    langcode
+  }
+}
+QUERY
+    );
+    $this->assertEquals('{"data":{"contentPaths":[[{"path":"\/node\/1","langcode":"en"},{"path":"\/node\/1","langcode":"fr"}]]}}', $response->getContent());
   }
 
 }
